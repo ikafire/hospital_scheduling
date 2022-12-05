@@ -41,11 +41,11 @@ def main():
             if (not str_form in tabu_list) and neighbor_fitness > current_fitness:
                 current_solution = neighbor
                 current_fitness = neighbor_fitness
-    
+
         if current_fitness > best_fitness:
             best_solution = current_solution
             best_fitness = current_fitness
-        
+
         tabu_list.add(get_string_notation(current_solution))
 
         i = i + 1
@@ -73,7 +73,7 @@ def get_neighbors(solution):
 def fitness(solution):
     fitness = 0
     shifts = split_solution_to_shifts(solution)
-    
+
     # shift coverage penalty
     coverage = np.zeros(DAYS_IN_MONTH).astype(int)
     for shift in shifts:
@@ -85,7 +85,7 @@ def fitness(solution):
     for shift in shifts:
         if (sum(shift) > MAX_SHIFTS):
             fitness = fitness + OVERSHIFT_PENALTY
-    
+
     shift_days = [sum(shift) for shift in shifts]
     # total shift count penalty
     fitness = fitness - np.sum(shift_days)
