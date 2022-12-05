@@ -6,7 +6,7 @@ def better_than(sol1, sol2):
 
 class Tabu:
     def __init__(self):
-        self.max_iter = 10
+        self.max_iter = 100
 
     def solve(self, solution):
         best = solution
@@ -40,9 +40,9 @@ class Tabu:
             if current not in tabu_list:
                 tabu_list.append(current)
 
-            print (best)
-            print (current)
-            print (tabu_list)
+            print(f'best: {best}, fitness {best.fitness()}')
+            print(f'current: {current}, fitness {current.fitness()}')
+            print(f'tabu: {len(tabu_list)}')
 
             i = i + 1
 
