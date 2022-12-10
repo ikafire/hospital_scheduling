@@ -1,40 +1,36 @@
-from datetime import date
-from typing import List
+from datetime import date, timedelta
+from typing import List, Dict
 import copy
 import random
-import uuid
 
 import numpy as np
 
 class Employee:
-    def __init__(self, shift: List[int], id=None):
-        self.shift = shift
-        if id:
-            self.id = id
-        else:
-            self.id = uuid.uuid4()
+    def __init__(self,
+                 name: str,
+                 capacities: List[str]=[],
+                 days_off: List[date]=[]):
+        self.name = name
+        self.capacities = capacities
+        self.days_off = days_off
 
-    def get_neighbors(self):
-        neighbors = []
-        for i in range(len(self.shift)):
-            clone = copy.deepcopy(self)
-            if clone.shift[i] == 0:
-                clone.shift[i] = 1
-            else:
-                clone.shift[i] = 0
-            neighbors.append(clone)
+    def can_do(self, shift_type: str, date: date):
+        if self.capacities and not shift_type in self.capacities:
+            return False
 
-        random.shuffle(neighbors)
-        return neighbors
+        if date in self.days_off:
+            return False
+
+        return True
 
     def __str__(self):
-        return f'employee {str(self.id)[:8]}: {"".join(map(str, self.shift))}'
+        return f'employee {str(self.name)[:8]}: {"".join(map(str, self.shift))}'
 
     def __repr__(self):
         return self.__str__()
 
     def __eq__(self, other):
-        return self.id == other.id and \
+        return self.name == other.name and \
             np.array_equal(self.shift, other.shift)
 
     def __ne__(self, other):
@@ -42,10 +38,38 @@ class Employee:
 
 
 class SchedulingSolution:
-    def __init__(self, date_start: date, date_end: date, employees: List[Employee]=[]):
+    def __init__(self,
+                 date_start: date,
+                 date_end: date,
+                 employees: List[Employee],
+                 shift_types: List[str],
+                 initial_shifts: Dict[str, List[str]] = {}):
+
         self.date_start = date_start
         self.date_end = date_end
         self.employees = employees
+        self.shift_types = shift_types
+        self.days = (date_end - date_start).days + 1
+
+        shift_worker_candidates = {} # Dict[type][day] = list of candidates
+        for t in shift_types:
+            candidates_of_this_type = []
+            for i in range(self.days):
+                d = self.date_start + timedelta(days=i)
+                candidates = [e.name for e in self.employees if e.can_do(t, d)]
+                candidates_of_this_type.append(candidates)
+            shift_worker_candidates[t] = candidates_of_this_type
+        self.shift_worker_candidates = shift_worker_candidates
+
+        if initial_shifts:
+            self.shifts = initial_shifts
+        else:
+            self.shifts = {}
+            for t in shift_types:
+                shift = [''] * self.days
+                for i in range(self.days):
+                    shift[i] = self.shift_worker_candidates[t][i][0]
+                self.shifts[t] = shift
 
     def fitness(self):
         days = (self.date_end - self.date_start).days + 1
@@ -58,11 +82,15 @@ class SchedulingSolution:
     def get_neighbors(self):
         neighbors = []
 
-        for i, employee in enumerate(self.employees):
-            for employee_neighbor in employee.get_neighbors():
-                clone = copy.deepcopy(self)
-                clone.employees[i] = employee_neighbor
-                neighbors.append(clone)
+        for t in self.shift_types:
+            shift = self.shifts[t]
+            for i, shift_worker in enumerate(shift):
+                candidates = self.shift_worker_candidates[t][i]
+                for candidate in candidates:
+                    if candidate != shift_worker:
+                        clone = copy.deepcopy(self)
+                        clone.shifts[t][i] = candidate
+                        neighbors.append(clone)
 
         return neighbors
 
