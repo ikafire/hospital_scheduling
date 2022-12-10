@@ -8,7 +8,7 @@ from scheduling_solution import SchedulingSolution, Employee
 
 def test_shifts__no_initial_shifts__initialize_shift_with_arbitrary_assignment():
     def assert_shift(shift):
-        assert len(shift) == 3 # day count
+        assert len(shift) == 3  # day count
         assert all(element in ('A', 'B') for element in shift)
 
     solution = SchedulingSolution(
@@ -93,7 +93,7 @@ def test_get_neighbors__with_limited_employ_capacity__no_result_violating_capaci
         employees=[
             Employee(name='A'),
             Employee(name='B', capacities=['type1']),
-    ])
+        ])
 
     neighbors = solution.get_neighbors()
     neighbor_shifts = [n.shifts for n in neighbors]
@@ -114,7 +114,7 @@ def test_get_neighbors__with_days_off__no_result_violating_days_off():
         employees=[
             Employee(name='A'),
             Employee(name='B', days_off=[date(2022, 11, 2), date(2022, 11, 3)]),
-    ])
+        ])
 
     neighbors = solution.get_neighbors()
     neighbor_shifts = [n.shifts for n in neighbors]

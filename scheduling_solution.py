@@ -1,7 +1,6 @@
 from datetime import date, timedelta
 from typing import List, Dict
 import copy
-import random
 
 import numpy as np
 
@@ -9,14 +8,14 @@ import numpy as np
 class Employee:
     def __init__(self,
                  name: str,
-                 capacities: List[str]=[],
-                 days_off: List[date]=[]):
+                 capacities: List[str] = [],
+                 days_off: List[date] = []):
         self.name = name
         self.capacities = capacities
         self.days_off = days_off
 
     def can_do(self, shift_type: str, date: date):
-        if self.capacities and not shift_type in self.capacities:
+        if self.capacities and shift_type not in self.capacities:
             return False
 
         if date in self.days_off:
@@ -39,7 +38,7 @@ class SchedulingSolution:
         self.shift_types = shift_types
         self.days = (date_end - date_start).days + 1
 
-        shift_worker_candidates = {} # Dict[type][day] = list of candidates
+        shift_worker_candidates = {}  # Dict[type][day] = list of candidates
         for t in shift_types:
             candidates_of_this_type = []
             for i in range(self.days):

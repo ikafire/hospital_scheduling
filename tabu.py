@@ -4,6 +4,7 @@ def better_than(sol1, sol2):
     else:
         return sol1.fitness() > sol2.fitness()
 
+
 class Tabu:
     def __init__(self):
         self.max_iter = 100
@@ -25,7 +26,7 @@ class Tabu:
             for neighbor in neighbors:
                 if better_than(neighbor, best_neighbor):
                     best_neighbor = neighbor
-                if (not neighbor in tabu_list) and better_than(neighbor, best_non_tabu_neighbor):
+                if (neighbor not in tabu_list) and better_than(neighbor, best_non_tabu_neighbor):
                     best_non_tabu_neighbor = neighbor
 
             # ignore tabu rule if nowhere to go

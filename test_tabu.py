@@ -1,5 +1,6 @@
 from tabu import Tabu
 
+
 def test_no_neighbor():
     tabu = Tabu()
     initial_state = FakeSolution(1)
@@ -7,6 +8,7 @@ def test_no_neighbor():
     result = tabu.solve(initial_state)
 
     assert result == initial_state
+
 
 def test_simple_case():
     tabu = Tabu()
@@ -19,6 +21,7 @@ def test_simple_case():
     result = tabu.solve(initial_state)
 
     assert result == FakeSolution(4)
+
 
 class FakeSolution:
     def __init__(self, score):
