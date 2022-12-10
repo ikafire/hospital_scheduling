@@ -24,19 +24,6 @@ class Employee:
 
         return True
 
-    def __str__(self):
-        return f'employee {str(self.name)[:8]}: {"".join(map(str, self.shift))}'
-
-    def __repr__(self):
-        return self.__str__()
-
-    def __eq__(self, other):
-        return self.name == other.name and \
-            np.array_equal(self.shift, other.shift)
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
 
 class SchedulingSolution:
     def __init__(self,
@@ -97,8 +84,8 @@ class SchedulingSolution:
 
     def __str__(self):
         lines = []
-        for e in self.employees:
-            lines.append(str(e))
+        for t in self.shift_types:
+            lines.append(str(self.shifts[t]))
 
         return '\n'.join(lines)
 
