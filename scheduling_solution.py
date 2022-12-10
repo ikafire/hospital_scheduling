@@ -5,6 +5,7 @@ import random
 
 import numpy as np
 
+
 class Employee:
     def __init__(self,
                  name: str,
@@ -107,7 +108,7 @@ class SchedulingSolution:
     def __eq__(self, other):
         return self.date_start == other.date_start and \
             self.date_end == other.date_end and \
-            np.array_equal(self.employees, other.employees)
+            self.shifts == other.shifts
 
     def __ne__(self, other):
         return not self.__eq__(other)

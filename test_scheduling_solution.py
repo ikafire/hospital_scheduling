@@ -125,13 +125,20 @@ def test_get_neighbors__with_days_off__no_result_violating_days_off():
     ])
 
 
-@pytest.mark.skip()
-# @pytest.mark.parametrize("left,right,expected", [
-#     (SchedulingSolution(date(2022, 11, 1), date(2022, 11, 3)), SchedulingSolution(date(2022, 11, 1), date(2022, 11, 4)), False),
-#     (SchedulingSolution(date(2022, 11, 1), date(2022, 11, 3)), SchedulingSolution(date(2022, 11, 1), date(2022, 11, 3)), True),
-#     (SchedulingSolution(date(2022, 11, 1), date(2022, 11, 3), employees=[Employee(name='a', shift=[1, 1, 0])]), SchedulingSolution(date(2022, 11, 1), date(2022, 11, 3), employees=[Employee(name='a', shift=[1, 0, 0])]), False),
-#     (SchedulingSolution(date(2022, 11, 1), date(2022, 11, 3), employees=[Employee(name='a', shift=[1, 1, 0])]), SchedulingSolution(date(2022, 11, 1), date(2022, 11, 3), employees=[Employee(name='a', shift=[1, 1, 0])]), True),
-#     (SchedulingSolution(date(2022, 11, 1), date(2022, 11, 3), employees=[Employee(name='a', shift=[1, 1, 0])]), SchedulingSolution(date(2022, 11, 1), date(2022, 11, 3), employees=[Employee(name='b', shift=[1, 1, 0])]), False),
-# ])
-def test_solution_equal(left, right, expected):
+@pytest.mark.parametrize("left_shift,right_shift,expected", [
+    ({'type1': ['A', 'A'], 'type2': ['B', 'B']}, {'type1': ['A', 'A'], 'type2': ['B', 'B']}, True),
+    ({'type1': ['A', 'A'], 'type2': ['B', 'B']}, {'type1': ['A', 'A'], 'type2': ['B', 'A']}, False),
+])
+def test_solution_equal__different_shifts__equal_when_shifts_are_the_same(left_shift, right_shift, expected):
+    def get_solution_with_initial_shift(shift):
+        return SchedulingSolution(
+            date_start=date(2022, 11, 1),
+            date_end=date(2022, 11, 2),
+            shift_types=['type1', 'type2'],
+            initial_shifts=shift,
+            employees=[Employee(name='A'), Employee(name='B')])
+
+    left = get_solution_with_initial_shift(left_shift)
+    right = get_solution_with_initial_shift(right_shift)
+
     assert left.__eq__(right) == expected
