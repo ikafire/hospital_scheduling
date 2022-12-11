@@ -6,8 +6,9 @@ def better_than(sol1, sol2):
 
 
 class Tabu:
-    def __init__(self):
-        self.max_iter = 100
+    def __init__(self, max_iter=100, fitness_target=0):
+        self.max_iter = max_iter
+        self.fitness_target = fitness_target
 
     def solve(self, solution):
         best = solution
@@ -16,7 +17,7 @@ class Tabu:
         tabu_list.append(best)
 
         i = 0
-        while i < self.max_iter:
+        while i < self.max_iter and best.fitness() < self.fitness_target:
             neighbors = current.get_neighbors()
             if not neighbors:
                 break
