@@ -2,6 +2,8 @@ from datetime import date, timedelta
 from typing import List, Dict
 import copy
 import random
+from collections import Counter
+import itertools
 
 
 class Employee:
@@ -58,16 +60,25 @@ class SchedulingSolution:
                 self.shifts[t] = shift
 
     def fitness(self):
-        return self.get_concurrent_shift_penalty()
+        return self.concurrent_shift_penalty() + self.too_many_shifts_penalty()
 
-    def get_concurrent_shift_penalty(self):
+    def concurrent_shift_penalty(self):
+        penalty = 0
         shift_size = len(self.shift_types)
-        concurrent_shift_penalty = 0
         for workers in zip(*self.shifts.values()):
             unique_workers = len(set(workers))
             concurrent_shifts = shift_size - unique_workers
-            concurrent_shift_penalty = concurrent_shift_penalty - concurrent_shifts * 100000
-        return concurrent_shift_penalty
+            penalty = penalty - concurrent_shifts * 100000
+        return penalty
+
+    def too_many_shifts_penalty(self):
+        penalty = 0
+        shifts_per_employee = Counter(itertools.chain(*self.shifts.values()))
+        for shift_count in shifts_per_employee.values():
+            overshifts = shift_count - 8
+            if overshifts > 0:
+                penalty = penalty - overshifts * 10000
+        return penalty
 
     def get_neighbors(self):
         neighbors = []

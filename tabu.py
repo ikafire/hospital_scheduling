@@ -42,7 +42,8 @@ class Tabu:
             if current not in tabu_list:
                 tabu_list.append(current)
 
-            print(f'best: {best}, fitness {best.fitness()}')
+            print(f'iter {i}, best fitness {best.fitness()}')
+            # print(f'best: {best}, fitness {best.fitness()}')
             # print(f'current: {current}, fitness {current.fitness()}')
             # print(f'tabu: {len(tabu_list)}')
 

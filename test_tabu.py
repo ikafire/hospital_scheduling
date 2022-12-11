@@ -11,7 +11,7 @@ def test_no_neighbor():
 
 
 def test_simple_case():
-    tabu = Tabu()
+    tabu = Tabu(fitness_target=100)
     initial_state = FakeSolution(1)
     initial_state.add_neighbor(FakeSolution(3))
     temp = FakeSolution(2)

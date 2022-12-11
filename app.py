@@ -1,4 +1,6 @@
 from datetime import date
+from collections import Counter
+import itertools
 
 from scheduling_solution import SchedulingSolution, Employee
 from tabu import Tabu
@@ -15,7 +17,7 @@ MAX_ITER = 100
 
 
 def main():
-    tabu = Tabu()
+    tabu = Tabu(max_iter=50)
     solution = SchedulingSolution(
         date(2022, 12, 1), date(2022, 12, 30),
         employees=[
@@ -39,6 +41,7 @@ def main():
     print(f'病房: {result.shifts["病房"]}')
     print(f'ICU: {result.shifts["ICU"]}')
     print(f'急診: {result.shifts["急診"]}')
+    print(Counter(itertools.chain(*result.shifts.values())))
 
 
 if __name__ == '__main__':

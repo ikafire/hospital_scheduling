@@ -154,6 +154,19 @@ def test_concurrent_shift_penalty():
             Employee(name='A'), Employee(name='B'), Employee(name='C'),
         ])
 
-    penalty = solution.get_concurrent_shift_penalty()
+    penalty = solution.concurrent_shift_penalty()
 
     assert penalty == -200000  # 100000 for each concurrent shift
+
+
+def test_too_many_shifts_penalty():
+    solution = SchedulingSolution(
+        date_start=date(2022, 11, 1),
+        date_end=date(2022, 11, 10),
+        shift_types=['type1'],
+        initial_shifts={'type1': ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A']},
+        employees=[Employee(name='A')])
+
+    penalty = solution.too_many_shifts_penalty()
+
+    assert penalty == -20000
