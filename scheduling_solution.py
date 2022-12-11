@@ -57,10 +57,13 @@ class SchedulingSolution:
                 self.shifts[t] = shift
 
     def fitness(self):
+        return self.get_concurrent_shift_penalty()
+
+    def get_concurrent_shift_penalty(self):
         shift_size = len(self.shift_types)
         concurrent_shift_penalty = 0
-        for shifts_in_a_day in zip(*self.shifts.values()):
-            unique_workers = len(set(shifts_in_a_day))
+        for workers in zip(*self.shifts.values()):
+            unique_workers = len(set(workers))
             concurrent_shifts = shift_size - unique_workers
             concurrent_shift_penalty = concurrent_shift_penalty - concurrent_shifts * 100000
         return concurrent_shift_penalty

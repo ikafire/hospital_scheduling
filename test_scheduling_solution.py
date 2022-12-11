@@ -144,7 +144,7 @@ def test_solution_equal__different_shifts__equal_when_shifts_are_the_same(left_s
     assert left.__eq__(right) == expected
 
 
-def test_fitness__concurrent_shifts__add_concurrent_shift_penalty():
+def test_concurrent_shift_penalty():
     solution = SchedulingSolution(
         date_start=date(2022, 11, 1),
         date_end=date(2022, 11, 2),
@@ -154,6 +154,6 @@ def test_fitness__concurrent_shifts__add_concurrent_shift_penalty():
             Employee(name='A'), Employee(name='B'), Employee(name='C'),
         ])
 
-    fitness = solution.fitness()
+    penalty = solution.get_concurrent_shift_penalty()
 
-    assert fitness == -200000  # 100000 for each concurrent shift
+    assert penalty == -200000  # 100000 for each concurrent shift
