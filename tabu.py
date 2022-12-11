@@ -42,8 +42,8 @@ class Tabu:
                 tabu_list.append(current)
 
             print(f'best: {best}, fitness {best.fitness()}')
-            print(f'current: {current}, fitness {current.fitness()}')
-            print(f'tabu: {len(tabu_list)}')
+            # print(f'current: {current}, fitness {current.fitness()}')
+            # print(f'tabu: {len(tabu_list)}')
 
             i = i + 1
 

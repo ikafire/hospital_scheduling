@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from typing import List, Dict
 import copy
+import random
 
 
 class Employee:
@@ -53,7 +54,7 @@ class SchedulingSolution:
             for t in shift_types:
                 shift = [''] * self.days
                 for i in range(self.days):
-                    shift[i] = self.shift_worker_candidates[t][i][0]
+                    shift[i] = random.choice(self.shift_worker_candidates[t][i])
                 self.shifts[t] = shift
 
     def fitness(self):
@@ -81,6 +82,7 @@ class SchedulingSolution:
                         clone.shifts[t][i] = candidate
                         neighbors.append(clone)
 
+        random.shuffle(neighbors)
         return neighbors
 
     def __str__(self):
