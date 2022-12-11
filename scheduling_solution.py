@@ -2,8 +2,6 @@ from datetime import date, timedelta
 from typing import List, Dict
 import copy
 
-import numpy as np
-
 
 class Employee:
     def __init__(self,
@@ -59,12 +57,13 @@ class SchedulingSolution:
                 self.shifts[t] = shift
 
     def fitness(self):
-        days = (self.date_end - self.date_start).days + 1
-        coverage = np.zeros(days).astype(int)
-        for e in self.employees:
-            coverage = np.bitwise_or(coverage, np.array(e.shift))
-
-        return (sum(coverage) - days) * 10000
+        shift_size = len(self.shift_types)
+        concurrent_shift_penalty = 0
+        for shifts_in_a_day in zip(*self.shifts.values()):
+            unique_workers = len(set(shifts_in_a_day))
+            concurrent_shifts = shift_size - unique_workers
+            concurrent_shift_penalty = concurrent_shift_penalty - concurrent_shifts * 100000
+        return concurrent_shift_penalty
 
     def get_neighbors(self):
         neighbors = []

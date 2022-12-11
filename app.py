@@ -17,12 +17,13 @@ MAX_ITER = 100
 def main():
     tabu = Tabu()
     solution = SchedulingSolution(
-        date(2022, 11, 1), date(2022, 11, 30),
-        employees=[Employee([0] * 30)])
+        date(2022, 11, 1), date(2022, 11, 10),
+        employees=[Employee('A'), Employee('B')],
+        shift_types=['type1', 'type2'])
 
     result = tabu.solve(solution)
 
-    print(result)
+    print(result.shifts)
 
 
 if __name__ == '__main__':
